@@ -1,0 +1,87 @@
+﻿<Page x:Class="Nexus.NgrokTunnelPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Nexus"
+    xmlns:data="clr-namespace:Nexus.Data"
+    xmlns:converters="clr-namespace:Nexus.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800"
+    Title="NgrokTunnelPage">
+
+    <Page.DataContext>
+        <x:Static Member="data:GlobalStates.NgrokTunnel" />
+    </Page.DataContext>
+    <Page.Resources>
+        <converters:ServerStatusToBrushConverter x:Key="ServerStatusToBrushConverter" />
+    </Page.Resources>
+
+    <ScrollViewer Background="White">
+        <StackPanel Margin="16">
+            <TextBlock Style="{StaticResource H2}" Text="ngrok Tunnel" />
+            <Rectangle DockPanel.Dock="Top" Margin="0,16" VerticalAlignment="Center"
+                Stroke="{StaticResource Gray400}" />
+            <TextBlock Margin="0,0,0,4" Style="{StaticResource H4}" Text="Startup Command" />
+            <TextBox x:Name="StartupCommandTextBox" Margin="0,0,0,8"
+                Style="{StaticResource DefaultTextBox}" Padding="8,4"
+                Text="{Binding Config.StartupCommand, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Margin="0,0,0,4" Style="{StaticResource H4}" Text="Tunnel Ids" />
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <TextBlock Margin="0,0,0,4" Text="Minecraft" />
+                    <TextBox Margin="0,0,0,8"
+                        Style="{StaticResource DefaultTextBox}" Padding="8,4"
+                        Text="{Binding Config.MinecraftTunnelId, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="4,0">
+                    <TextBlock Margin="0,0,0,4" Text="Web Panel" />
+                    <TextBox Margin="0,0,0,8"
+                        Style="{StaticResource DefaultTextBox}" Padding="8,4"
+                        Text="{Binding Config.WebPanelTunnelId, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="8,0,0,0">
+                    <TextBlock Margin="0,0,0,4" Text="SFTP" />
+                    <TextBox Margin="0,0,0,8"
+                        Style="{StaticResource DefaultTextBox}" Padding="8,4"
+                        Text="{Binding Config.SftpTunnelId, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+            <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                <Button x:Name="StartServerButton" Margin="0,0,8,0" Padding="16,4" Content="Start ngrok Tunnel" Click="StartServerButton_Click" />
+                <Button x:Name="GenerateConfigurationButton" Margin="0,0,8,0" Padding="16,4" Content="Generate ngrok Configuration" Click="GenerateConfigurationButton_Click" />
+                <TextBlock VerticalAlignment="Center">
+                    <Hyperlink x:Name="ConfigureHelpLink" NavigateUri="https://ngrok.com/docs/agent/config/" RequestNavigate="ConfigureHelpLink_RequestNavigate">
+                        <Span>
+                            <Run Text="ⓘ " />
+                            <Run Text="How to configure ngrok?" />
+                        </Span>
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Margin="0,0,0,4" Style="{StaticResource H4}" Text="Server Status"/>
+            <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                <Rectangle Margin="0,2" RadiusX="100" RadiusY="100" Fill="{Binding Status, Converter={StaticResource ServerStatusToBrushConverter}}" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+                <TextBlock Margin="8,0,0,0" Text="{Binding Status}"/>
+            </StackPanel>
+            <TextBlock Margin="0,0,0,4" Style="{StaticResource H4}" Text="Endpoints"/>
+            <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
+                <TextBlock Margin="0,0,8,0" Text="Minecraft:"/>
+                <TextBox Style="{StaticResource CopyableTextBlock}" Text="{Binding MinecraftEndpoint, Mode=OneWay}"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
+                <TextBlock Margin="0,0,8,0" Text="Web Panel:"/>
+                <TextBox Style="{StaticResource CopyableTextBlock}" Text="{Binding WebPanelEndpoint, Mode=OneWay}"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                <TextBlock Margin="0,0,8,0" Text="SFTP:"/>
+                <TextBox Style="{StaticResource CopyableTextBlock}" Text="{Binding SftpEndpoint, Mode=OneWay}"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

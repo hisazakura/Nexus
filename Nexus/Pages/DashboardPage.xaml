@@ -1,0 +1,63 @@
+﻿<Page x:Class="Nexus.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nexus"
+      xmlns:data="clr-namespace:Nexus.Data"
+      xmlns:converters="clr-namespace:Nexus.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DashboardPage">
+    <Page.Resources>
+        <converters:ServerStatusToBrushConverter x:Key="ServerStatusToBrushConverter" />
+		<ControlTemplate x:Key="StatusTemplate" TargetType="ContentControl">
+			<Border Background="{StaticResource Gray100}" BorderThickness="1" BorderBrush="{StaticResource Gray400}" CornerRadius="5">
+				<DockPanel Margin="16,12">
+					<TextBlock DockPanel.Dock="Left" Style="{StaticResource H3}" Text="{TemplateBinding Content}" />
+					<Rectangle DockPanel.Dock="Right" Margin="0,4,0,4" RadiusX="100" RadiusY="100" Fill="{TemplateBinding Tag}" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+					<Border/>
+				</DockPanel>
+			</Border>
+		</ControlTemplate>
+	</Page.Resources>
+
+	<ScrollViewer Background="White">
+		<StackPanel Margin="16">
+			<TextBlock Style="{StaticResource H2}" Text="Dashboard"/>
+			<Rectangle DockPanel.Dock="Top" Margin="0,16" VerticalAlignment="Center" Stroke="{StaticResource Gray400}"/>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
+				<Grid Margin="0,0,6,0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="1*"/>
+					</Grid.RowDefinitions>
+                    <ContentControl x:Name="MinecraftServerStatus" Grid.Row="0" Margin="0,0,0,8" Content="Minecraft Server" Template="{StaticResource StatusTemplate}" Tag="{Binding Source={x:Static data:GlobalStates.MinecraftServer}, Path=Status, Converter={StaticResource ServerStatusToBrushConverter}}" />
+					<ContentControl x:Name="WebPanelStatus" Grid.Row="1" Margin="0,4,0,4" Content="Web Panel" Template="{StaticResource StatusTemplate}" Tag="{StaticResource Green600}" />
+					<ContentControl x:Name="SftpStatus" Grid.Row="2" Margin="0,8,0,0" Content="SFTP" Template="{StaticResource StatusTemplate}" Tag="{StaticResource Green600}" />
+				</Grid>
+				<Border x:Name="NgrokTunnelStatus"  Grid.Column="1" Margin="6,0,0,0" Background="{StaticResource Gray100}" BorderThickness="1" BorderBrush="{StaticResource Gray400}" CornerRadius="5">
+					<StackPanel Margin="16,12">
+						<DockPanel>
+							<TextBlock DockPanel.Dock="Left" Style="{StaticResource H3}" Text="ngrok Tunnel" />
+                            <Rectangle DockPanel.Dock="Right" Margin="0,4,0,4" RadiusX="100" RadiusY="100" Fill="{Binding Source={x:Static data:GlobalStates.NgrokTunnel}, Path=Status, Converter={StaticResource ServerStatusToBrushConverter}}" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
+							<Border/>
+						</DockPanel>
+						<TextBlock Margin="0,8,0,0" Style="{StaticResource H4}" Text="Minecraft Server"/>
+						<TextBox Style="{StaticResource CopyableTextBlock}" Text="{Binding Source={x:Static data:GlobalStates.NgrokTunnel}, Path=MinecraftEndpoint, Mode=OneWay}"/>
+						<TextBlock Margin="0,8,0,0" Style="{StaticResource H4}" Text="Web Panel"/>
+						<TextBox Style="{StaticResource CopyableTextBlock}" Text="{Binding Source={x:Static data:GlobalStates.NgrokTunnel}, Path=WebPanelEndpoint, Mode=OneWay}"/>
+						<TextBlock Margin="0,8,0,0" Style="{StaticResource H4}" Text="SFTP"/>
+						<TextBox Style="{StaticResource CopyableTextBlock}" Text="{Binding Source={x:Static data:GlobalStates.NgrokTunnel}, Path=SftpEndpoint, Mode=OneWay}"/>
+					</StackPanel>
+				</Border>
+			</Grid>
+			<Button x:Name="TestButton" Margin="0,16" HorizontalAlignment="Center" Padding="16,4" Content="Test"/>
+		</StackPanel>
+	</ScrollViewer>
+</Page>

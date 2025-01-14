@@ -1,0 +1,73 @@
+﻿<Window x:Class="Nexus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Nexus"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="1280" 
+		Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+	<DockPanel>
+		<Border DockPanel.Dock="Left" Width="300" Background="{StaticResource Gray900}">
+			<DockPanel Margin="16">
+				<TextBlock DockPanel.Dock="Top" Style="{StaticResource H2}" Foreground="White" Text="Nexus Server Panel"/>
+				<Rectangle DockPanel.Dock="Top" Margin="0,16,0,16" VerticalAlignment="Center" Stroke="{StaticResource Gray400}"/>
+				
+				<TextBlock DockPanel.Dock="Bottom" Foreground="{StaticResource Gray300}" Text="Nexus Server Panel 1.0.0"/>
+				<Rectangle DockPanel.Dock="Bottom" Margin="0,16,0,16" VerticalAlignment="Center" Stroke="{StaticResource Gray400}"/>
+				<StackPanel x:Name="SidebarRadioButtons">
+					<RadioButton GroupName="SidebarRadioButtonGroup" Style="{StaticResource SidebarRadioButtonStyle}" Tag="dashboard" IsChecked="True">
+						<RadioButton.Content>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image Source="{StaticResource Dashboard_White}" Width="20" Height="20" Margin="0,0,16,0"/>
+								<TextBlock Text="Dashboard"/>
+							</StackPanel>
+						</RadioButton.Content>
+					</RadioButton>
+					<RadioButton GroupName="SidebarRadioButtonGroup" Style="{StaticResource SidebarRadioButtonStyle}" Tag="ngrok">
+						<RadioButton.Content>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image Source="{StaticResource ngrok_White}" Width="20" Height="20" Margin="0,0,16,0"/>
+								<TextBlock Text="ngrok Tunnel"/>
+							</StackPanel>
+						</RadioButton.Content>
+					</RadioButton>
+					<RadioButton GroupName="SidebarRadioButtonGroup" Style="{StaticResource SidebarRadioButtonStyle}" Tag="minecraft">
+						<RadioButton.Content>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image Source="{StaticResource Minecraft_White}" Width="20" Height="20" Margin="0,0,16,0"/>
+								<TextBlock Text="Minecraft Server"/>
+							</StackPanel>
+						</RadioButton.Content>
+					</RadioButton>
+					<RadioButton GroupName="SidebarRadioButtonGroup" Style="{StaticResource SidebarRadioButtonStyle}" Tag="web">
+						<RadioButton.Content>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image Source="{StaticResource Window_White}" Width="20" Height="20" Margin="0,0,16,0"/>
+								<TextBlock Text="Web Panel"/>
+							</StackPanel>
+						</RadioButton.Content>
+					</RadioButton>
+					<RadioButton GroupName="SidebarRadioButtonGroup" Style="{StaticResource SidebarRadioButtonStyle}" Tag="sftp">
+						<RadioButton.Content>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image Source="{StaticResource Folder_White}" Width="20" Height="20" Margin="0,0,16,0"/>
+								<TextBlock Text="SFTP"/>
+							</StackPanel>
+						</RadioButton.Content>
+					</RadioButton>
+					<RadioButton GroupName="SidebarRadioButtonGroup" Style="{StaticResource SidebarRadioButtonStyle}" Tag="settings">
+						<RadioButton.Content>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+								<Image Source="{StaticResource Gear_White}" Width="20" Height="20" Margin="0,0,16,0"/>
+								<TextBlock Text="Settings"/>
+							</StackPanel>
+						</RadioButton.Content>
+					</RadioButton>
+				</StackPanel>
+			</DockPanel>
+		</Border>
+
+		<Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden" Source="Pages/DashboardPage.xaml"/>
+	</DockPanel>
+</Window>
