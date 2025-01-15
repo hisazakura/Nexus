@@ -13,12 +13,13 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SSH.NET" Version="2024.2.0" />
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
-    <Content Include="Services\\Node\\**\\*">
+    <Content Include="Executable\\**\\*">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Executable\NexusMinecraftServer\" />
     <Folder Include="Services\Node\" />
   </ItemGroup>
 
