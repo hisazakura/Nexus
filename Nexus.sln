@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nexus", "Nexus\Nexus.csproj", "{DE7284D6-0E7B-4560-B68B-11ED3F6CD10C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusMinecraftServer", "NexusMinecraftServer\NexusMinecraftServer.csproj", "{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{DE7284D6-0E7B-4560-B68B-11ED3F6CD10C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE7284D6-0E7B-4560-B68B-11ED3F6CD10C}.Release|x64.ActiveCfg = Release|x64
 		{DE7284D6-0E7B-4560-B68B-11ED3F6CD10C}.Release|x64.Build.0 = Release|x64
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Debug|x64.Build.0 = Debug|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Release|x64.ActiveCfg = Release|Any CPU
+		{BF4927B2-7D4E-4F09-A4F7-5069E026E2F9}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,8 @@ namespace Nexus.Services.Minecraft
 {
     public class MinecraftServer : INotifyPropertyChanged
     {
-        private readonly string _serverControllerPath = ".\\Services\\Node\\server.js";
+        private readonly string _serverControllerPath =
+            ".\\Executable\\NexusMinecraftServer\\NexusMinecraftServer.exe";
         private ServerStatus _serverStatus = ServerStatus.Offline;
 
         private readonly MinecraftWebsocketController _webSocketController;
@@ -81,8 +82,8 @@ namespace Nexus.Services.Minecraft
             {
                 ProcessStartInfo processStartInfo = new()
                 {
-                    FileName = "cmd.exe",
-                    Arguments = $"/c node {_serverControllerPath} {Config.ServerPath} {Config.Arguments}",
+                    FileName = _serverControllerPath,
+                    Arguments = $"{Config.ServerPath} {Config.Arguments}",
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                     UseShellExecute = true,
                     CreateNoWindow = false,
@@ -91,7 +92,7 @@ namespace Nexus.Services.Minecraft
             }
             catch (Exception ex)
             {
-                Trace.TraceError($"Error starting Node.js process: {ex.Message}");
+                Trace.TraceError($"Error starting Minecraft Server Controller: {ex.Message}");
             }
         }
 
