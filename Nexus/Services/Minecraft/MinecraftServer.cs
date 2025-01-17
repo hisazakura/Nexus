@@ -11,8 +11,6 @@ namespace Nexus.Services.Minecraft
 {
     public class MinecraftServer : INotifyPropertyChanged
     {
-        private readonly string _serverControllerPath =
-            ".\\Executable\\NexusMinecraftServer\\NexusMinecraftServer.exe";
         private ServerStatus _serverStatus = ServerStatus.Offline;
 
         private readonly MinecraftWebsocketController _webSocketController;
@@ -82,7 +80,7 @@ namespace Nexus.Services.Minecraft
             {
                 ProcessStartInfo processStartInfo = new()
                 {
-                    FileName = _serverControllerPath,
+                    FileName = Config.NexusServerPath,
                     Arguments = $"{Config.ServerPath} {Config.Arguments}",
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                     UseShellExecute = true,

@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Nexus" GeneratedClassName="UserSettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NexusServerPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MinecraftServerPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MinecraftServerArguments" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="NgrokStartupCommand" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ngrok start --all</Value>
+    </Setting>
+    <Setting Name="NgrokMinecraftTunnelId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">minecraft</Value>
+    </Setting>
+    <Setting Name="NgrokWebPanelTunnelId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">web-panel</Value>
+    </Setting>
+    <Setting Name="NgrokSftpTunnelId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sftp</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

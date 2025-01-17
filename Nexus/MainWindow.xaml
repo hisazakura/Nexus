@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Nexus"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280" 
-		Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+		Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
 	<DockPanel>
 		<Border DockPanel.Dock="Left" Width="300" Background="{StaticResource Gray900}">
 			<DockPanel Margin="16">
