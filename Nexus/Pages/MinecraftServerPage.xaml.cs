@@ -38,7 +38,7 @@ namespace Nexus
 
         private void BrowseServerButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            OpenFileDialog openFileDialog = new()
             {
                 Title = "Select Minecraft Server JAR",
                 Filter = "JAR Files (*.jar)|*.jar|All Files (*.*)|*.*",
@@ -69,6 +69,24 @@ namespace Nexus
         private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) SendCommand();
+        }
+
+        private void BrowseNexusServerButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                Title = "Select Nexus Server Executable",
+                Filter = "Executable Files (*.exe)|*.exe",
+                DefaultExt = ".exe",
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result != true) return;
+
+            string selectedFile = openFileDialog.FileName;
+            GlobalStates.MinecraftServer.Config.NexusServerPath = selectedFile;
         }
     }
 }

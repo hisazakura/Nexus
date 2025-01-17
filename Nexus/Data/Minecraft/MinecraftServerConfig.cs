@@ -9,9 +9,23 @@ namespace Nexus.Data.Minecraft
 {
     public class MinecraftServerConfig : INotifyPropertyChanged
     {
+        private string _nexusServerPath = "";
         private string _serverPath = "";
         private string _arguments = "-Xms4G -Xmx4G -XX:+UseG1GC";
 
+        public string NexusServerPath
+        {
+            get => _nexusServerPath;
+            set
+            {
+                if (_nexusServerPath != value)
+                {
+                    _nexusServerPath = value;
+                    UserSettings.Default.NexusServerPath = value;
+                    PropertyChanged?.Invoke(this, new(nameof(NexusServerPath)));
+                }
+            }
+        }
         public string ServerPath
         {
             get => _serverPath;
@@ -20,6 +34,7 @@ namespace Nexus.Data.Minecraft
                 if (_serverPath != value)
                 {
                     _serverPath = value;
+                    UserSettings.Default.MinecraftServerPath = value;
                     PropertyChanged?.Invoke(this, new(nameof(ServerPath)));
                 }
             }
@@ -32,6 +47,7 @@ namespace Nexus.Data.Minecraft
                 if (_arguments != value)
                 {
                     _arguments = value;
+                    UserSettings.Default.MinecraftServerArguments = value;
                     PropertyChanged?.Invoke(this, new(nameof(Arguments)));
                 }
             }

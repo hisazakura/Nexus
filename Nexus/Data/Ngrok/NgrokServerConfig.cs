@@ -42,8 +42,27 @@ namespace Nexus.Data.Ngrok
             if (EqualityComparer<T>.Default.Equals(var, value)) return;
 
             var = value;
+            SaveToUserSettings(propertyName);
             PropertyChanged?.Invoke(this, new(propertyName));
-            
+        }
+
+        private void SaveToUserSettings(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case nameof(StartupCommand):
+                    UserSettings.Default.NgrokStartupCommand = StartupCommand;
+                    break;
+                case nameof(MinecraftTunnelId):
+                    UserSettings.Default.NgrokMinecraftTunnelId = MinecraftTunnelId;
+                    break;
+                case nameof(WebPanelTunnelId):
+                    UserSettings.Default.NgrokWebPanelTunnelId = WebPanelTunnelId;
+                    break;
+                case nameof(SftpTunnelId):
+                    UserSettings.Default.NgrokSftpTunnelId = SftpTunnelId;
+                    break;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
