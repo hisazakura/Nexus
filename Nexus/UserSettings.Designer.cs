@@ -106,5 +106,29 @@ namespace Nexus {
                 this["NgrokSftpTunnelId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SftpUsername {
+            get {
+                return ((string)(this["SftpUsername"]));
+            }
+            set {
+                this["SftpUsername"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SftpPassword {
+            get {
+                return ((string)(this["SftpPassword"]));
+            }
+            set {
+                this["SftpPassword"] = value;
+            }
+        }
     }
 }

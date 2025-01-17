@@ -51,6 +51,9 @@ namespace Nexus
             GlobalStates.NgrokTunnel.Config.MinecraftTunnelId = UserSettings.Default.NgrokMinecraftTunnelId;
             GlobalStates.NgrokTunnel.Config.WebPanelTunnelId = UserSettings.Default.NgrokWebPanelTunnelId;
             GlobalStates.NgrokTunnel.Config.SftpTunnelId = UserSettings.Default.NgrokSftpTunnelId;
+            if (UserSettings.Default.SftpUsername != "")
+                GlobalStates.SftpServer.Username = UserSettings.Default.SftpUsername;
+            GlobalStates.SftpServer.Password = UserSettings.Default.SftpPassword;
         }
 
         private void SidebarRadioButtonGroup_SelectionChanged(RadioButton? radioButton)

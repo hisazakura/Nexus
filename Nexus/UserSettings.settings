@@ -23,5 +23,11 @@
     <Setting Name="NgrokSftpTunnelId" Type="System.String" Scope="User">
       <Value Profile="(Default)">sftp</Value>
     </Setting>
+    <Setting Name="SftpUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SftpPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

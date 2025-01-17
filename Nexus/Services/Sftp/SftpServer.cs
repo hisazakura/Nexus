@@ -38,6 +38,7 @@ namespace Nexus.Services.Sftp
                 if (_username != value)
                 {
                     _username = value;
+                    UserSettings.Default.SftpUsername = value;
                     PropertyChanged?.Invoke(this, new(nameof(Username)));
                 }
             }
@@ -50,6 +51,7 @@ namespace Nexus.Services.Sftp
                 if (_password != value)
                 {
                     _password = value;
+                    UserSettings.Default.SftpPassword = value;
                     PropertyChanged?.Invoke(this, new(nameof(Password)));
                 }
             }
