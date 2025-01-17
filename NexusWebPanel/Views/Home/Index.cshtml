@@ -1,0 +1,14 @@
+﻿<div>
+    <textarea id="console" rows="10" class="w-100"></textarea>
+</div>
+
+<script>
+    const logConsole = document.getElementById("console");
+    const connection = new signalR.HubConnectionBuilder().withUrl("/logs").build();
+
+    connection.on("ReceiveMessage", (message) => {
+        logConsole.textContent += `${message}\n`;
+    });
+
+    connection.start().catch(err => console.error(err));
+</script>
