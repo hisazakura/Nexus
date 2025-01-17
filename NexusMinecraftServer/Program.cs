@@ -5,10 +5,14 @@ bool _keepRunning = true;
 ServerConfig config = new(args);
 config.Validate();
 
+// Open two ports because one port can only handle one connection at a time
 MinecraftServer minecraftServer = new(config);
-WebSocketManager webSocketManager = new(8080);
+WebSocketManager backendWebSocketManager = new(8080);
+WebSocketManager publicWebSocketManager = new(8081);
 
-webSocketManager.MessageReceived += (client, message) =>
+backendWebSocketManager.MessageReceived += (client, message) =>
+    CommandHandler.Handle(minecraftServer, client, message);
+publicWebSocketManager.MessageReceived += (client, message) =>
     CommandHandler.Handle(minecraftServer, client, message);
 
 Console.CancelKeyPress += (sender, e) =>

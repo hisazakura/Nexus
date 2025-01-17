@@ -19,6 +19,7 @@ namespace NexusMinecraftServer
         public WebSocketManager(int port)
         {
             _httpListener = new HttpListener();
+            _httpListener.Prefixes.Add($"http://localhost:{port}/");
             _httpListener.Prefixes.Add($"http://127.0.0.1:{port}/");
 
             _httpListener.Start();
@@ -74,7 +75,6 @@ namespace NexusMinecraftServer
                     else if (result.MessageType == WebSocketMessageType.Text)
                     {
                         string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                        Console.WriteLine($"Received message: {message}");
                         MessageReceived?.Invoke(webSocket, message);
                     }
                 }
