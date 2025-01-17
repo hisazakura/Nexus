@@ -82,8 +82,8 @@ namespace NexusMinecraftServer
         {
             if (ServerProcess == null) return;
 
-            ServerProcess.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
-            ServerProcess.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
+            ServerProcess.OutputDataReceived += (sender, e) => { if (e.Data != null) Log(e.Data); };
+            ServerProcess.ErrorDataReceived += (sender, e) => { if (e.Data != null) Error(e.Data); };
             ServerProcess.Exited += (sender, e) =>
             {
                 Log($"[Nexus] Minecraft server exited with code {ServerProcess.ExitCode}");
