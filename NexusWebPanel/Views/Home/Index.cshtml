@@ -2,13 +2,38 @@
     <textarea id="console" rows="10" class="w-100"></textarea>
 </div>
 
-<script>
-    const logConsole = document.getElementById("console");
-    const connection = new signalR.HubConnectionBuilder().withUrl("/logs").build();
+@section scripts {
+    <script type="text/javascript">
+        const consoleTextArea = document.getElementById('console');
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/logs")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
-    connection.on("ReceiveMessage", (message) => {
-        logConsole.textContent += `${message}\n`;
-    });
+        connection.on("ReceiveMessage", (message) => {
+            const timestamp = new Date().toISOString();
+            consoleTextArea.value += `[${timestamp}] ${message}\n`;
 
-    connection.start().catch(err => console.error(err));
-</script>
+            consoleTextArea.scrollTop = consoleTextArea.scrollHeight;
+        });
+
+        async function startConnection() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+                consoleTextArea.value += "Connected to log stream...\n";
+            } catch (err) {
+                console.error("SignalR Connection Error: ", err);
+                consoleTextArea.value += "Failed to connect to log stream. Retrying in 5 seconds...\n";
+                setTimeout(startConnection, 5000);
+            }
+        }
+
+        startConnection();
+
+        connection.onclose(async () => {
+            consoleTextArea.value += "Connection lost. Attempting to reconnect...\n";
+            await startConnection();
+        });
+    </script>
+}
