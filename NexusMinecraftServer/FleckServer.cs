@@ -9,29 +9,33 @@ namespace NexusMinecraftServer
 {
     public class FleckServer(int port)
     {
-        private Fleck.WebSocketServer _server = new($"ws://127.0.0.1:{port}");
-        private IWebSocketConnection? _client;
+        private readonly Fleck.WebSocketServer _server = new($"ws://127.0.0.1:{port}");
+        private readonly List<IWebSocketConnection> _clients = [];
         public int Port { get; } = port;
 
-        public event Action<string>? MessageReceived;
+        public event Action<IWebSocketConnection>? ClientConnected;
+        public event Action<IWebSocketConnection>? ClientDisonnected;
+        public event Action<IWebSocketConnection, string>? MessageReceived;
+
+        private void ApplyListeners(IWebSocketConnection socket)
+        {
+            socket.OnOpen = () =>
+            {
+                _clients.Add(socket);
+                ClientConnected?.Invoke(socket);
+            };
+            socket.OnClose = () => { 
+                _clients.Remove(socket);
+                ClientDisonnected?.Invoke(socket);
+            };
+            socket.OnMessage = message => { 
+                MessageReceived?.Invoke(socket, message);
+            };
+        }
 
         public void Start()
         {
-            _server.Start(socket =>
-            {
-                socket.OnOpen = () =>
-                {
-                    Console.WriteLine("Client connected.");
-                    _client = socket;
-                };
-                socket.OnClose = () =>
-                {
-                    Console.WriteLine("Client disconnected.");
-                    _client = null;
-                };
-                socket.OnMessage = message =>
-                    MessageReceived?.Invoke(message);
-            });
+            _server.Start(ApplyListeners);
         }
 
         public void Stop()
@@ -39,9 +43,15 @@ namespace NexusMinecraftServer
             _server.Dispose();
         }
 
-        public void SendMessage(string input)
+        public void SendMessage(string message, Guid id)
         {
-            _client?.Send(input);
+            _clients.Find(client => client.ConnectionInfo.Id == id)?.Send(message);
+        }
+
+        public void Broadcast(string message)
+        {
+            foreach (IWebSocketConnection client in _clients)
+                client.Send(message);
         }
     }
 }
