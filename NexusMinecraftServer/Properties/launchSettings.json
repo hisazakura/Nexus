@@ -2,7 +2,7 @@
   "profiles": {
     "NexusMinecraftServer": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\Archy\\proj\\minecraft\\nexus\\spigot-1.21.jar -Xms4G -Xmx4G -XX:+UseG1GC"
+      "commandLineArgs": "D:\\Archy\\proj\\minecraft\\nexus\\spigot-1.21.1.jar -Xms4G -Xmx4G -XX:+UseG1GC"
     }
   }
 }

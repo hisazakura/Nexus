@@ -10,7 +10,7 @@ namespace NexusMinecraftServer
 {
     public class CommandHandler()
     {
-        public static void Handle(MinecraftServer minecraftServer, WebSocket client, string command)
+        public static void Handle(MinecraftServer minecraftServer, FleckServerCollection collection, FleckServer? server, string command)
         {
             switch (command)
             {
@@ -21,16 +21,18 @@ namespace NexusMinecraftServer
                     minecraftServer.Stop();
                     break;
                 case "servercheck":
-                    WebSocketManager.SendMessage(client, minecraftServer.ServerProcess != null ? 
-                        "[Nexus] Server is running!" : "[Nexus] Server is not running.");
+                    string message = minecraftServer.ServerProcess != null ?
+                        "[Nexus] Server is running!" : "[Nexus] Server is not running.";
+                    if (server != null) server.SendMessage(message);
+                    else Console.WriteLine(message);
                     break;
                 default:
-                    HandleCustom(minecraftServer, client, command);
+                    HandleCustom(minecraftServer, collection, server, command);
                     break;
             }
         }
 
-        private static void HandleCustom(MinecraftServer minecraftServer, WebSocket client, string command)
+        private static void HandleCustom(MinecraftServer minecraftServer, FleckServerCollection collection, FleckServer? _, string command)
         {
             if (minecraftServer.ServerProcess != null)
             {
@@ -40,7 +42,7 @@ namespace NexusMinecraftServer
                     if (writer.BaseStream.CanWrite)
                     {
                         writer.WriteLine(command);
-                        WebSocketManager.Broadcast($"[Command] {command}");
+                        collection.Broadcast($"[Command] {command}");
                     }
                 }
                 catch (Exception ex)
@@ -52,7 +54,7 @@ namespace NexusMinecraftServer
             {
                 const string message = "Unknown command or server is not running.";
                 Console.WriteLine(message);
-                WebSocketManager.Broadcast(message);
+                collection.Broadcast(message);
             }
         }
     }
