@@ -78,6 +78,25 @@ namespace NexusMinecraftServer
             }
         }
 
+        public void SendCommand(string command)
+        {
+            if (ServerProcess == null)
+            {
+                Error("[Nexus] Server is not running.");
+                return;
+            }
+
+            try
+            {
+                if (ServerProcess.StandardInput.BaseStream.CanWrite)
+                    ServerProcess.StandardInput.WriteLine(command);
+            }
+            catch (Exception ex)
+            {
+                Error($"[Error] Failed to send command to Minecraft server: {ex.Message}");
+            }
+        }
+
         private void SetupProcessListeners()
         {
             if (ServerProcess == null) return;
