@@ -1,6 +1,7 @@
 ﻿using Fleck;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net.Sockets;
 using System.Net.WebSockets;
@@ -60,12 +61,7 @@ namespace NexusMinecraftServer
             
             try
             {
-                using StreamWriter writer = minecraftServer.ServerProcess.StandardInput;
-                if (writer.BaseStream.CanWrite)
-                {
-                    writer.WriteLine(command);
-                    server.Broadcast($"[Command] {command}");
-                }
+                minecraftServer.SendCommand(command);
             }
             catch (Exception ex)
             {
