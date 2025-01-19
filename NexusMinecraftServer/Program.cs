@@ -19,7 +19,6 @@ Console.CancelKeyPress += (sender, e) =>
     Console.WriteLine("Shutting down...");
     cancellationTokenSource.Cancel();
     e.Cancel = true;
-    server.Stop();
 };
 
 Console.WriteLine("Server console ready. Type commands or press Ctrl+C to exit.");
@@ -46,7 +45,10 @@ while (!cancellationTokenSource.Token.IsCancellationRequested)
 
 await inputTask;
 
+server.Stop();
 if (minecraftServer.ServerProcess != null)
     minecraftServer.Stop();
+
+minecraftServer.ServerProcess?.WaitForExit();
 
 Console.WriteLine("Application exited.");

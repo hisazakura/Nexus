@@ -68,9 +68,8 @@ namespace NexusMinecraftServer
             Log("[Nexus] Stopping Minecraft server...");
             try
             {
-                using StreamWriter writer = ServerProcess.StandardInput;
-                if (writer.BaseStream.CanWrite)
-                    writer.WriteLine("stop");
+                if (ServerProcess.StandardInput.BaseStream.CanWrite)
+                    ServerProcess.StandardInput.WriteLine("stop");
             }
             catch (Exception ex)
             {
