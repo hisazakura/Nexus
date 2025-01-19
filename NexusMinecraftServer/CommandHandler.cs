@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Fleck;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,49 +12,64 @@ namespace NexusMinecraftServer
 {
     public class CommandHandler()
     {
-        public static void Handle(MinecraftServer minecraftServer, WebSocket client, string command)
+        public static void ApplyHandler(MinecraftServer minecraftServer, FleckServer server)
+        {
+            server.MessageReceived += (socket, message) =>
+            {
+                if (!TryHandleBackendCommand(minecraftServer, server, socket, message))
+                    HandleMinecraftCommand(minecraftServer, server, message);
+            };
+        }
+
+        public static void Handle(MinecraftServer minecraftServer, FleckServer server, string message)
+        {
+            if (!TryHandleBackendCommand(minecraftServer, server, null, message))
+                HandleMinecraftCommand(minecraftServer, server, message);
+        }
+
+        private static bool TryHandleBackendCommand(MinecraftServer minecraftServer, FleckServer server, IWebSocketConnection? client, string command)
         {
             switch (command)
             {
                 case "start":
                     minecraftServer.Start();
-                    break;
+                    return true;
                 case "stop":
                     minecraftServer.Stop();
-                    break;
+                    return true;
                 case "servercheck":
-                    WebSocketManager.SendMessage(client, minecraftServer.ServerProcess != null ? 
-                        "[Nexus] Server is running!" : "[Nexus] Server is not running.");
-                    break;
+                    string message = minecraftServer.ServerProcess != null ?
+                        "[Nexus] Server is running!" : "[Nexus] Server is not running.";
+                    if (client != null) server.SendMessage(message, client.ConnectionInfo.Id);
+                    else Console.WriteLine(message);
+                    return true;
                 default:
-                    HandleCustom(minecraftServer, client, command);
-                    break;
+                    return false;
             }
         }
 
-        private static void HandleCustom(MinecraftServer minecraftServer, WebSocket client, string command)
+        private static void HandleMinecraftCommand(MinecraftServer minecraftServer, FleckServer server, string command)
         {
-            if (minecraftServer.ServerProcess != null)
-            {
-                try
-                {
-                    using StreamWriter writer = minecraftServer.ServerProcess.StandardInput;
-                    if (writer.BaseStream.CanWrite)
-                    {
-                        writer.WriteLine(command);
-                        WebSocketManager.Broadcast($"[Command] {command}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    minecraftServer.Error($"[Error] Failed to send command to Minecraft server: {ex.Message}");
-                }
-            }
-            else
+            if (minecraftServer.ServerProcess == null)
             {
                 const string message = "Unknown command or server is not running.";
                 Console.WriteLine(message);
-                WebSocketManager.Broadcast(message);
+                server.Broadcast(message);
+                return;
+            }
+            
+            try
+            {
+                using StreamWriter writer = minecraftServer.ServerProcess.StandardInput;
+                if (writer.BaseStream.CanWrite)
+                {
+                    writer.WriteLine(command);
+                    server.Broadcast($"[Command] {command}");
+                }
+            }
+            catch (Exception ex)
+            {
+                minecraftServer.Error($"[Error] Failed to send command to Minecraft server: {ex.Message}");
             }
         }
     }

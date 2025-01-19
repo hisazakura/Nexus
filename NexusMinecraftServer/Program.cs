@@ -5,21 +5,21 @@ bool _keepRunning = true;
 ServerConfig config = new(args);
 config.Validate();
 
-// Open two ports because one port can only handle one connection at a time
 MinecraftServer minecraftServer = new(config);
-WebSocketManager backendWebSocketManager = new(8080);
-WebSocketManager publicWebSocketManager = new(8081);
+FleckServer server = new(8080);
+server.Start();
 
-backendWebSocketManager.MessageReceived += (client, message) =>
-    CommandHandler.Handle(minecraftServer, client, message);
-publicWebSocketManager.MessageReceived += (client, message) =>
-    CommandHandler.Handle(minecraftServer, client, message);
+minecraftServer.LogReceived += message => server.Broadcast(message);
+minecraftServer.ErrorReceived += message => server.Broadcast(message);
+
+CommandHandler.ApplyHandler(minecraftServer, server);
 
 Console.CancelKeyPress += (sender, e) =>
 {
     Console.WriteLine("Shutting down...");
     _keepRunning = false;
     e.Cancel = true;
+    server.Stop();
 };
 
 Console.WriteLine("Server console ready. Type commands or press Ctrl+C to exit.");
@@ -30,7 +30,7 @@ Task inputTask = Task.Run(() =>
     {
         string? input = Console.ReadLine();
         if (!string.IsNullOrEmpty(input))
-            CommandHandler.Handle(minecraftServer, null!, input);
+            CommandHandler.Handle(minecraftServer, server, input);
     }
 });
 
