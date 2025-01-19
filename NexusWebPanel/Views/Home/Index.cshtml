@@ -11,8 +11,7 @@
             .build();
 
         connection.on("ReceiveMessage", (message) => {
-            const timestamp = new Date().toISOString();
-            consoleTextArea.value += `[${timestamp}] ${message}\n`;
+            consoleTextArea.value += `${message}\n`;
 
             consoleTextArea.scrollTop = consoleTextArea.scrollHeight;
         });

@@ -31,7 +31,7 @@ app.MapControllerRoute(
 
 app.MapHub<LogHub>("/logs");
 
-WebsocketListener listener = new(8081);
+WebsocketListener listener = new(8080);
 listener.Start();
 
 IHubContext<LogHub> hubContext = app.Services.GetRequiredService<IHubContext<LogHub>>();
