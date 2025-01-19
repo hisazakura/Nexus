@@ -1,6 +1,6 @@
 ﻿using NexusMinecraftServer;
 
-bool _keepRunning = true;
+CancellationTokenSource cancellationTokenSource = new();
 
 ServerConfig config = new(args);
 config.Validate();
@@ -17,7 +17,7 @@ CommandHandler.ApplyHandler(minecraftServer, server);
 Console.CancelKeyPress += (sender, e) =>
 {
     Console.WriteLine("Shutting down...");
-    _keepRunning = false;
+    cancellationTokenSource.Cancel();
     e.Cancel = true;
     server.Stop();
 };
@@ -26,15 +26,22 @@ Console.WriteLine("Server console ready. Type commands or press Ctrl+C to exit."
 
 Task inputTask = Task.Run(() =>
 {
-    while (_keepRunning)
+    while (!cancellationTokenSource.Token.IsCancellationRequested)
     {
-        string? input = Console.ReadLine();
-        if (!string.IsNullOrEmpty(input))
-            CommandHandler.Handle(minecraftServer, server, input);
+        try
+        {
+            string? input = ConsoleHelper.ReadLine(cancellationTokenSource.Token);
+            if (!string.IsNullOrEmpty(input))
+                CommandHandler.Handle(minecraftServer, server, input);
+        }
+        catch (OperationCanceledException)
+        {
+            // Task was canceled; exit gracefully
+        }
     }
 });
 
-while (_keepRunning)
+while (!cancellationTokenSource.Token.IsCancellationRequested)
     await Task.Delay(1000);
 
 await inputTask;
