@@ -6,7 +6,7 @@ namespace NexusWebPanel.Services
 {
     public class WebsocketListener(int port)
     {
-        private ClientWebSocket _webSocket = new ClientWebSocket();
+        private ClientWebSocket _webSocket = new();
         private CancellationTokenSource _cancellationTokenSource = new();
 
         private Task? _monitorPortTask;
@@ -127,6 +127,32 @@ namespace NexusWebPanel.Services
                     Disconnected?.Invoke();
                 }
             }
+        }
+
+        private async Task SendMessageAsync(string message, CancellationToken cancellationToken)
+        {
+            if (!IsConnected) return;
+
+            try
+            {
+                byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+                await _webSocket.SendAsync(messageBytes, WebSocketMessageType.Text, true, cancellationToken);
+            }
+            catch (WebSocketException wsEx)
+            {
+                Trace.TraceError($"WebSocket exception during send: {wsEx.Message}");
+                Disconnected?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError($"Error sending WebSocket message: {ex.Message}");
+                Disconnected?.Invoke();
+            }
+        }
+
+        public void SendMessage(string message)
+        {
+            Task.Run(() => SendMessageAsync(message, _cancellationTokenSource.Token));
         }
     }
 }
