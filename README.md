@@ -1,5 +1,6 @@
 # Nexus Project
 Nexus Project aimed to help Minecraft Developer to deploy their own public server for development using a local Windows machine.
+> **_NOTE:_**  This project is still in heavy development and testing. Expect bugs, missing/wrong components, bad configurations, performance issues, etc.
 
 # Lineup
 ## Nexus Server Panel
