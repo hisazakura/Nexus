@@ -59,10 +59,22 @@ namespace Nexus.Services.WebPanel
             }
         }
 
-        // change to backend request
         private async Task<bool> TryConnect()
         {
-            return true;
+            Uri tunnelsEndpoint = new($"http://127.0.0.1:{_port}/api/status");
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(tunnelsEndpoint);
+                response.EnsureSuccessStatusCode();
+
+                return true;
+            }
+            catch (HttpRequestException e)
+            {
+                Trace.TraceError($"Request error: {e.Message}");
+            }
+
+            return false;
         }
     }
 }

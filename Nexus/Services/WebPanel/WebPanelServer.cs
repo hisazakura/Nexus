@@ -19,7 +19,7 @@ namespace Nexus.Services.WebPanel
 
         public WebPanelServerConfig Config { get; } = new();
 
-        public int Port { get; private set; } = 5280;
+        public int Port { get; private set; } = 5000;
 
         public ServerStatus Status
         {
