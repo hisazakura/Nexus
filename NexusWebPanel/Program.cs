@@ -7,8 +7,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+builder.Services.AddHttpClient();
 
-var app = builder.Build();
+// Register WebsocketListener as a singleton
+builder.Services.AddSingleton<WebsocketListener>(builder => new(8080));
+
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -25,13 +29,14 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<LogHub>("/logs");
 
-WebsocketListener listener = new(8081);
+WebsocketListener listener = app.Services.GetRequiredService<WebsocketListener>();
 listener.Start();
 
 IHubContext<LogHub> hubContext = app.Services.GetRequiredService<IHubContext<LogHub>>();

@@ -130,5 +130,17 @@ namespace Nexus {
                 this["SftpPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string NexusWebPanelPath {
+            get {
+                return ((string)(this["NexusWebPanelPath"]));
+            }
+            set {
+                this["NexusWebPanelPath"] = value;
+            }
+        }
     }
 }

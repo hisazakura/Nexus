@@ -1,14 +1,120 @@
-﻿<div>
-    <textarea id="console" rows="10" class="w-100"></textarea>
+﻿@{
+    ViewData["Title"] = "Web Panel";
+}
+
+<div class="row">
+    <div class="col-8 px-3 d-flex flex-column">
+        <textarea id="console" rows="20" readonly
+            class="w-100 text-white focus-ring-secondary border-0 rounded-1 font-monospace p-2 shadow-sm mb-3"
+            style="background-color: #0D1B2A;"></textarea>
+        <div class="d-flex flex-row">
+            <input type="text" class="form-control py-0 me-3 shadow-sm" id="command" placeholder="Enter command">
+            <button type="submit" class="btn btn-primary h-100 px-4 shadow-sm" id="sendCommand">Send</button>
+        </div>
+    </div>
+    <div class="col-4 px-3">
+        <div class="row py-3 px-1 rounded-2 mb-3 shadow-sm text-white" style="background-color: #2A4D14;">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                    <h6 class="mb-1">Minecraft Server</h6>
+                    <p id="minecraftUrl" class="m-0 blur">-</p>
+                </div>
+                <button class="bg-transparent border-0 text-white" onclick="toggleBlur($(this).parent()[0])">
+                    <i class="fas fa-eye-slash fs-4"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row py-3 px-1 rounded-2 mb-3 shadow-sm text-white" style="background-color: #88498F;">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                    <h6 class="mb-1">SFTP</h6>
+                    <p id="sftpUrl" class="m-0 blur">-</p>
+                </div>
+                <button class="bg-transparent border-0 text-white" onclick="toggleBlur($(this).parent()[0])">
+                    <i class="fas fa-eye-slash fs-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script>
-    const logConsole = document.getElementById("console");
-    const connection = new signalR.HubConnectionBuilder().withUrl("/logs").build();
+@section scripts {
+    <script type="text/javascript">
+        const consoleTextArea = document.getElementById('console');
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/logs")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
-    connection.on("ReceiveMessage", (message) => {
-        logConsole.textContent += `${message}\n`;
-    });
+        connection.on("ReceiveMessage", (message) => {
+            consoleTextArea.value += `${message}\n`;
 
-    connection.start().catch(err => console.error(err));
-</script>
+            consoleTextArea.scrollTop = consoleTextArea.scrollHeight;
+        });
+
+        async function startConnection() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+                consoleTextArea.value += "Connected to log stream...\n";
+            } catch (err) {
+                console.error("SignalR Connection Error: ", err);
+                consoleTextArea.value += "Failed to connect to log stream. Retrying in 5 seconds...\n";
+                setTimeout(startConnection, 5000);
+            }
+        }
+
+        startConnection();
+
+        connection.onclose(async () => {
+            consoleTextArea.value += "Connection lost. Attempting to reconnect...\n";
+            await startConnection();
+        });
+
+        async function updateTunnels() {
+            const response = await fetch('/api/tunnels');
+            const data = await response.json();
+            if (data["25565"])
+                document.getElementById("minecraftUrl").innerText = data["25565"];
+            if (data["22"])
+                document.getElementById("sftpUrl").innerText = data["25565"];
+        }
+
+        updateTunnels();
+
+        document.getElementById("sendCommand").addEventListener("click", function () {
+            const command = document.getElementById("command").value;
+
+            if (!command.trim()) return;
+
+            const payload = { command: command };
+            fetch("/api/command", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => {
+                    if (response.ok) return response.json();
+                    else return response.json().then(error => {
+                        throw new Error(error.error || "Failed to send command");
+                    });
+                })
+                .catch(error => {
+                    alert("Error: " + error.message);
+                });
+        });
+
+        function toggleBlur(parentElement) {
+            const pElement = parentElement.querySelector('p');
+            if (pElement) pElement.classList.toggle('blur');
+
+            const buttonIcon = parentElement.querySelector('button i');
+            if (buttonIcon) {
+                buttonIcon.classList.toggle('fa-eye-slash');
+                buttonIcon.classList.toggle('fa-eye');
+            }
+        }
+    </script>
+}
