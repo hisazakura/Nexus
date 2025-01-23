@@ -126,7 +126,7 @@ namespace Nexus.Services.Ngrok
             }
             catch (Exception ex)
             {
-                Trace.TraceError($"Error starting Node.js process: {ex.Message}");
+                Trace.TraceError($"Error starting ngrok process: {ex.Message}");
             }
         }
     }

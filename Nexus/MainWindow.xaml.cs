@@ -25,6 +25,7 @@ namespace Nexus
             { "dashboard", new("Pages/DashboardPage.xaml", UriKind.Relative) },
             { "ngrok", new("Pages/NgrokTunnelPage.xaml", UriKind.Relative) },
             { "minecraft", new("Pages/MinecraftServerPage.xaml", UriKind.Relative) },
+            { "web", new("Pages/WebPanelPage.xaml", UriKind.Relative) },
             { "sftp", new("Pages/SftpServerPage.xaml", UriKind.Relative) },
             { "settings", new("Pages/SettingsPage.xaml", UriKind.Relative) },
         };
@@ -51,6 +52,7 @@ namespace Nexus
             GlobalStates.NgrokTunnel.Config.MinecraftTunnelId = UserSettings.Default.NgrokMinecraftTunnelId;
             GlobalStates.NgrokTunnel.Config.WebPanelTunnelId = UserSettings.Default.NgrokWebPanelTunnelId;
             GlobalStates.NgrokTunnel.Config.SftpTunnelId = UserSettings.Default.NgrokSftpTunnelId;
+            GlobalStates.WebPanelServer.Config.NexusWebPanelPath = UserSettings.Default.NexusWebPanelPath;
             if (UserSettings.Default.SftpUsername != "")
                 GlobalStates.SftpServer.Username = UserSettings.Default.SftpUsername;
             GlobalStates.SftpServer.Password = UserSettings.Default.SftpPassword;
